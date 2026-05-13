@@ -56,3 +56,75 @@ Resultado esperado:
     <version>1.0.0</version>
 </dependency>
 ```
+
+### Exemplo de Uso
+
+```java
+import br.com.nogueiranogueira.validatorcore.documento.Cpf;
+import br.com.nogueiranogueira.validatorcore.service.ValidadorDocumentoService;
+
+ValidadorDocumentoService service = new ValidadorDocumentoService();
+
+// Validar CPF
+boolean ehValido = service.validar(new Cpf("12345678901"));
+System.out.println(ehValido); // true
+```
+
+## 🧪 Testes
+
+O projeto inclui testes unitários para validação de cada tipo de documento:
+
+```bash
+mvn test
+```
+
+Cobertura de testes:
+- ✅ Cpf com 11 dígitos → válido
+- ✅ Cpf com menos dígitos → inválido
+- ✅ Cnpj com 14 dígitos → válido
+- ✅ Cnpj com formato inválido → inválido
+- ✅ Ssn no formato XXX-XX-XXXX → válido
+- ✅ Ssn em formato incorreto → inválido
+- ✅ Documento nulo → inválido
+- ✅ Número nulo → inválido
+
+## 🔧 Configuração do Projeto
+
+**pom.xml** - Configurações principais:
+
+| Propriedade | Valor |
+|---|---|
+| groupId | br.com.nogueiranogueira.reuso |
+| artifactId | validator-core |
+| version | 1.0.0 |
+| Java Release | 21 |
+| Codificação | UTF-8 |
+| JUnit Version | 5.12.2 |
+
+## 📝 Notas de Desenvolvimento
+
+### Adicionar um Novo Tipo de Documento
+
+1. **Criar nova record** em `documento/`:
+   ```java
+   public record NovoDocumento(String numero) implements Documento { }
+   ```
+
+2. **Atualizar interface selada** `Documento.java`:
+   ```java
+   public sealed interface Documento permits Cpf, Cnpj, Ssn, NovoDocumento { ... }
+   ```
+
+3. **Adicionar caso no ValidadorDocumentoService**:
+   ```java
+   return switch (documento) {
+       case Cpf cpf -> validarCpf(cpf.numero());
+       case Cnpj cnpj -> validarCnpj(cnpj.numero());
+       case Ssn ssn -> validarSsn(ssn.numero());
+       case NovoDocumento novo -> validarNovoDocumento(novo.numero());
+   };
+   ```
+
+4. **Adicionar testes** em `ValidadorDocumentoServiceTest.java`
+
+O compilador **força a atualização** do switch - nenhum novo tipo pode ser adicionado sem atualizar a lógica de validação.
