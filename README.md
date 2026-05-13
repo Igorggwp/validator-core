@@ -179,18 +179,3 @@ Cobertura de testes:
 4. **Adicionar testes** em `ValidadorDocumentoServiceTest.java`
 
 O compilador **força a atualização** do switch - nenhum novo tipo pode ser adicionado sem atualizar a lógica de validação.
-
-## 📚 Referências
-
-- [Java Sealed Types](https://openjdk.java.net/jeps/409)
-- [Java Records](https://openjdk.java.net/jeps/395)
-- [Pattern Matching in Switch](https://openjdk.java.net/jeps/406)
-- [Maven Documentation](https://maven.apache.org/guides/)
-
-## 📄 Licença
-
-Propriedade intelectual da organização.
-
----
-
-**Desenvolvido com Java 21 e Padrões Modernos**
